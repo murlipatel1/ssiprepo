@@ -68,7 +68,7 @@ const Dashboardmurli = () => {
 
   return (
     <>
-    <SideBar/>
+    {/* <SideBar/> */}
     <form onSubmit={handleSubmit}>
         <input
         type="text"

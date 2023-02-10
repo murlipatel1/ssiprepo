@@ -1,4 +1,4 @@
-import React,{ useState } from "react";
+import React,{ useState , useEffect } from "react";
 import '../Assets/DeadStock.css';
 import SideBar from "../Elements/SideBar";
 import { FaSearch } from "react-icons/fa";
@@ -10,6 +10,27 @@ const DeadStock = () =>{
         console.log('Search button is clicked')
     }
     const [ItemDetails, setItemDetails] = useState(data);
+
+    const [stocks, setStocks] = useState([]);
+
+    useEffect(() => {
+        fetch('http://localhost:5000/api/deadstock/fetchalldeadstocks',{
+            method:'GET',
+            headers:{
+                'Content-Type': 'application/json',
+            'auth-token':localStorage.getItem('token')
+            }
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            setStocks(data);
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+    
+      }, []);
+
 
     return(
         <>
@@ -39,7 +60,7 @@ const DeadStock = () =>{
                 <hr />
                 <div className="lower-half">
                     <div className="history-list">
-                    <table className="Products" key ="product">
+                    {/* <table className="Products" key ="product">
                         <tbody >
                             <tr >
                                 <th>No.</th>
@@ -65,7 +86,33 @@ const DeadStock = () =>{
                                 ))}
                             </tbody>
                             
-                        </table>
+                        </table> */}
+                        <table>
+      <thead>
+        <tr>
+          <th>Stock Name</th>
+          <th>Date of Importing</th>
+          <th>Number of Units</th>
+          <th>ISBN</th>
+        </tr>
+      </thead>
+      <tbody>
+        {stocks.map((stock) => (
+          <tr key={stock.stock_id}>
+            <td>{stock.stock_name}</td>
+            <td>{stock.date_of_importing}</td>
+            <td>{stock.no_of_units}</td>
+            <td>{stock.isbn}</td>
+            {/* <td>
+              <button onClick={() =>{ handleDelete(stock._id)}}>Delete</button>
+            </td> */}
+            {/* <td>
+                <button onClick={() => handleEdit(stock)}>Edit</button>
+              </td> */}
+          </tr>
+        ))}
+      </tbody>
+    </table>
                     </div>
                 </div>
             </div>
