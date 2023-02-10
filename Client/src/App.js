@@ -12,6 +12,7 @@ import Login from './Pages/Login';
 import SignUp from './Pages/SignUp';
 import Dashboardmurli from './Pages/Dashboardmurli';
 import UpdatedDashboard from './Pages/UpdatedDashboard';
+import BarCode from './Elements/BarCode';
 // import Blogs from '';
 
 
@@ -31,6 +32,7 @@ function App() {
       <Route path='/about' element = {<AboutUs />}/>
       <Route path='/login' element = {<Login />}/>
       <Route path='/signup' element = {<SignUp />}/>
+      <Route path='/SCAN' element ={<BarCode />}/>
       {/* <Route path='/Blogs' element = {<Blogs />}/> */}
      </Routes>
    </BrowserRouter>

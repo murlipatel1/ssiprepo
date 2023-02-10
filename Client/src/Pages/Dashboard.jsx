@@ -4,6 +4,7 @@ import '../Assets/Dashboard.css';
 import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import data from '../Assets/mock-data.json';
+import BarCode from "../Elements/BarCode";
 
 // import newd from '../Pages/new-data.json';
 // import fs from
@@ -215,8 +216,8 @@ const Dashboard = () => {
                         <ul id="intro-text">
                             <li id="stock">Stock</li>
                             <li>Get notified on every update...</li>
-                            <Link>
-                                <li id="Scan-button"><button>
+                            <Link to='/SCAN'>
+                                <li id="Scan-button" className="scan"><button>
                                     Scan
                                 </button>
                                 </li>
