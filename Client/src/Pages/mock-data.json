@@ -1,0 +1,17 @@
+[
+    {
+      "id": "25CGF23",
+      "fullName": "Jenny Chan",
+      "address": "3 waterfoot road",
+      "phoneNumber": "333-962-7516",
+      "email": "jenny.chan@email.com"
+    },
+    {
+      "ID" : "18WEI15",
+      "productName" : "Uncle chips",
+      "Quantity" : "152",
+      "Date" : "25/01/23",
+      "ISBN" : "ASD233"
+    }
+  ]
+  

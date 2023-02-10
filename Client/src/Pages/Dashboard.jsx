@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import SideBar from "../Elements/SideBar";
 import '../Assets/Dashboard.css';
 import { FaSearch } from "react-icons/fa";
@@ -13,7 +13,7 @@ const Dashboard = () => {
     const [Products, setProducts] = useState(data);
     let i = 5;
     const newFormm = [];
-    // const form = document.getElementById('newproduct');
+    const form = document.getElementById('newproduct');
     const [addProduct, setProduct] = useState({
         "id": '',
         "Name": "",
@@ -23,32 +23,91 @@ const Dashboard = () => {
         "Quantity": "",
         "Status": ""
     })
+
+    const [stock_id, setstock_id] = useState('');
+    const [stock_name, setstock_name] = useState('');
+    const [date_of_importing, setdate_of_importing] = useState('');
+    const [no_of_units, setno_of_units] = useState('');
+    const [isbn, setIsbn] = useState('');
+  
+    // const [searchTerm, setSearchTerm] = useState('');
+  
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      fetch('http://localhost:5000/api/stock/addstock', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token':localStorage.getItem('token')
+        },
+        body: JSON.stringify({ stock_id, stock_name, date_of_importing, no_of_units, isbn }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    };
+  
+    const [stocks, setStocks] = useState([]);
+  
+    const handleDelete = (id) => {
+      
+        fetch('http://localhost:5000/api/deadstock/adddeadstock', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token':localStorage.getItem('token')
+        },
+        
+        body: JSON.stringify({stock_id:stock_id, stock_name:stock_name, date_of_importing:date_of_importing, no_of_units:no_of_units, isbn:isbn }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+
+      fetch(`http://localhost:5000/api/stock/deletestock/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token':localStorage.getItem('token')
+        },
+      })
+        .then((res) => {res.json()})
+        .then((data) => {
+          setStocks(stocks.filter((stock) => stock._id !== id));
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    };
+  
+    useEffect(() => {
+      fetch('http://localhost:5000/api/stock/fetchallstocks',{
+          method:'GET',
+          headers:{
+              'Content-Type': 'application/json',
+          'auth-token':localStorage.getItem('token')
+          }
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setStocks(data);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+  
+    }, []);
+  
     const handleFormChange = (event) => {
         event.preventDefault();
-        // const productName = event.target.getAttribute('productname');
-        // const fieldValue = JSON.stringify(InputEvent.value);
-        // const ID = event.currentTarget.getAttribute('productID');
-        // const fieldID = event.currentTarget.value;
-        // const loc = event.target.getAttribute('location');
-        // const quant = event.target.getAttribute('quantity');
-        // const opt = event.target.getAttribute('status-option');
-        // const newData=[
-        //     {
-                
-        // "id": "x",
-        // "Name": " sdsd",
-        // "ID" : "25IOC89",
-        // "Location": "Warehouse 5, Batch 2",
-        // "Expiry": " 1250 Days",
-        // "Quantity": "569",
-        // "Status": "In-Stock"
-        //     }
-        // ]
-        // fs.writeFile("mock-data.json",JSON.stringify(newData),(err)=>{
-        //     if(err) throw err;
-        //     console.log("Done writing");
-        // });
-        
         
         let updatedValue = {};
         i++;
@@ -87,57 +146,42 @@ const Dashboard = () => {
         // newFormData[productName] = fieldValue;
         // setProduct(newFormData);
     }
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    // const handleSubmit = (event) => {
+    //     event.preventDefault();
          
-        i++;
-        let daat = {
-            "id": i,
-            "Name": document.getElementById('product_name').value,
-            "ID": document.getElementById('product_id').value,
-            "Location": document.getElementById('product_location').value,
-            "Expiry": document.getElementById('product_expiry').value,
-            "Quantity": document.getElementById('quantity').value,
-            "Status": ""
-        }
+    //     i++;
+    //     let daat = {
+    //         "id": i,
+    //         "Name": document.getElementById('product_name').value,
+    //         "ID": document.getElementById('product_id').value,
+    //         "Location": document.getElementById('product_location').value,
+    //         "Expiry": document.getElementById('product_expiry').value,
+    //         "Quantity": document.getElementById('quantity').value,
+    //         "Status": ""
+    //     }
         
-        newFormm.push(daat);
-        console.log("THis is data")
-        console.log(newFormm);
-        const submitForm = {
-            "id": i,
-            "Name": addProduct.Name,
-            "ID": addProduct.ID,
-            "Location": addProduct.Location,
-            "Expiry": addProduct.Expiry,
-            "Quantity": addProduct.Quantity,
-            "Status": addProduct.Status
-        };
+    //     newFormm.push(daat);
+    //     console.log("THis is data")
+    //     console.log(newFormm);
+    //     const submitForm = {
+    //         "id": i,
+    //         "Name": addProduct.Name,
+    //         "ID": addProduct.ID,
+    //         "Location": addProduct.Location,
+    //         "Expiry": addProduct.Expiry,
+    //         "Quantity": addProduct.Quantity,
+    //         "Status": addProduct.Status
+    //     };
    
       
-        const submitForms = [...Products, submitForm];
-        setProducts(submitForms);
-        console.log(submitForms);
-        document.forms[0].reset();
+    //     const submitForms = [...Products, submitForm];
+    //     setProducts(submitForms);
+    //     console.log(submitForms);
+    //     document.forms[0].reset();
          
-    };
-
-    
-    
-
-
-
-    // const {buttonPopup,setButtonPopup} = useState(false);
-    // const addProduct = (e) =>{
-    //     // setButtonPopup(true);
-    //   e.preventDefault();
-    //   const formData = new formData(e.target);
-    //   const formDataObj = {};
-    //   formData.forEach((value,key)=>(formDataObj[key]=value));
-    //   console.log(formDataObj);
-
-    // }
+    // };
     const [searchTerm,setSearchTerm] = useState("");
+
     const products_disp = document.querySelector(".listt")
     const [switchToggled, setSwitchToggled] = useState(false)
     const ToggleSwitch = () => {
@@ -154,6 +198,13 @@ const Dashboard = () => {
         console.log('search button clicked')
     }
 
+    // Edit form 
+    const [editContactId, setEditContactId] = useState(null);
+
+    // const handleEditclick = (event) =>{
+    //   event.preventDefault();
+    //   console.log("hello")
+    // }
     return (
         <>
             <SideBar />
@@ -214,7 +265,6 @@ const Dashboard = () => {
                                             {val.Expiry}
                                         </td>
                                         <td>{val.Quantity}</td>
-
                                     </tr>
                             </tbody>
                         </table>
@@ -247,7 +297,7 @@ const Dashboard = () => {
                         </div>
                     </div>
                     <div className="list">
-                        <table className="Products" key="hello">
+                        {/* <table className="Products" key="hello">
                             <tbody>
                                 <tr>
                                     <th>No.</th>
@@ -286,37 +336,72 @@ const Dashboard = () => {
 
                                 ))}
                             </tbody>
-                        </table>
+                        </table> */}
+                            <table>
+      <thead>
+        <tr>
+          <th>Stock Name</th>
+          <th>Date of Importing</th>
+          <th>Number of Units</th>
+          <th>ISBN</th>
+        </tr>
+      </thead>
+      <tbody>
+        {stocks.map((stock) => (
+          <tr key={stock.stock_id}>
+            <td>{stock.stock_name}</td>
+            <td>{stock.date_of_importing}</td>
+            <td>{stock.no_of_units}</td>
+            <td>{stock.isbn}</td>
+            <td>
+              <button onClick={() =>{ handleDelete(stock._id)}}>Delete</button>
+            </td>
+            <td>
+                <button >Edit</button>
+              </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
                     </div>
                     {/* this is list eending */}
                 </div>
                 {/* this is lower half ending */}
-                <div className="option-field">
-                    {/* <h3>Add Product</h3> */}
-                    <form id="newproduct" >
-                        <input type="text" id="product_name" name="productname" required="reqired" placeholder="Product Name"
-                            onChange={handleFormChange} />
-                        <input type="text" id="product_id" name="productID" required="reqired" placeholder="Product ID"
-                            onChange={handleFormChange} />
-                        <input type="text" id="product_location" name="location" required="reqired" placeholder="Warehouse x , Batch y"
-                            onChange={handleFormChange} />
-                            <input type="text" id="product_expiry" name="expiry" required="reqired" placeholder=" abc Days"
-                            onChange={handleFormChange} />
-                        <input type="number" id="quantity" name="quantity" required="reqired" placeholder="Quantity"
-                            onChange={handleFormChange} />
 
-                        <select id="staus-options">
-                            <option value="In-stock"
-                                onChange={handleFormChange}>In-stock</option>
-                            <option value="Expiring soon"
-                                onChange={handleFormChange}>Expiring soon</option>
-                            <option value="Ordered"
-                                onChange={handleFormChange}>Ordered</option>
-                        </select>
-                    </form>
-                    <div id="Add-product">
-                        <button onClick={handleSubmit} type="submit" >Add Product</button>
-                    </div>
+                <div className="option-field">
+                <form onSubmit={handleSubmit}>
+        <input
+        type="text"
+        placeholder="Stock id"
+        value={stock_id}
+        onChange={(e) => setstock_id(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="Stock Name"
+        value={stock_name}
+        onChange={(e) => setstock_name(e.target.value)}
+      />
+      <input
+        type="date"
+        placeholder="Date of Importing"
+        value={date_of_importing}
+        onChange={(e) => setdate_of_importing(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="Number of Units"
+        value={no_of_units}
+        onChange={(e) => setno_of_units(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="ISBN"
+        value={isbn}
+        onChange={(e) => setIsbn(e.target.value)}
+      />
+      <button type="submit">Add Product</button>
+    </form>
                 </div>
             </div>
         </>

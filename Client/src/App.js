@@ -11,6 +11,7 @@ import AboutUs from './Pages/AboutUs';
 import Login from './Pages/Login';
 import SignUp from './Pages/SignUp';
 import Dashboardmurli from './Pages/Dashboardmurli';
+import UpdatedDashboard from './Pages/UpdatedDashboard';
 // import Blogs from '';
 
 
@@ -18,6 +19,7 @@ function App() {
   return (
    <BrowserRouter>
     <Routes>
+    <Route path='/updatedDashboard' element={ <UpdatedDashboard key = "dashboard" /> } />
       <Route path='/Dashboard' element={ <Dashboard key = "dashboard" /> } />
       <Route path='/Dashboardmurli' element={ <Dashboardmurli key = "dashboardmurli" /> } />
       <Route path='/History' element = { <Histroy key="history" />} />

@@ -12,9 +12,12 @@ app.use(express.json());
 
 app.use('/api/auth',require('./Routers/auth'))
 app.use('/api/stock',require('./Routers/stock'))
+app.use('/api/deadstock',require('./Routers/deadstock'))
+
 app.get('/', (req, res) => { 
     res.send('Hello World! of dead stock')
   })
+  
   app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
   })
